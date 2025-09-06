@@ -5,6 +5,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
+console.log('Railway PORT env variable:', process.env.PORT);
+console.log('All environment variables:', Object.keys(process.env));
 
 // ✅ Apply CORS **before defining routes**
 const allowedOrigins = [
