@@ -5,6 +5,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
+// Railway Health Check Endpoint
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
+
 console.log('Railway PORT env variable:', process.env.PORT);
 console.log('All environment variables:', Object.keys(process.env));
 
@@ -323,7 +328,11 @@ app.put('/api/updateSKU/:id', async (req, res) => {
 });
 
 // ✅ START SERVER (MOVED OUTSIDE MongoDB connection)
-const PORT = process.env.PORT || 4000;  // ✅ FIX: Use Railway's dynamic port
+const PORT = process.env.PORT || 4000;
+console.log('Railway PORT env variable:', process.env.PORT);
+console.log('All environment variables:', Object.keys(process.env));
+console.log('Final PORT being used:', PORT);
+  // ✅ FIX: Use Railway's dynamic port
 app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
 
 // Catch-All Route for 404 Errors
