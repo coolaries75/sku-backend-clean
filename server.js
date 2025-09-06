@@ -44,7 +44,10 @@ mongoose.connect(dbURI, {
 .then(() => {
     console.log('✅ Connected to MongoDB');
     console.log(`🔗 Active Database: ${dbURI.split('/').pop()}`); // ✅ Log the database name dynamically
- 
+ // Load test routes
+const testRoutes = require('./routes/TestItem');
+app.use('/api/test', testRoutes);
+
 // ✅ Test Route - Confirms API is Running
 app.get("/", (req, res) => {
     res.status(200).json({ message: "✅ API is running successfully!" });
@@ -56,33 +59,8 @@ app.get("/", (req, res) => {
     console.error('❌ MongoDB connection failed:', error);
 });
 
-// test db connection
-
-const TestItem = require("./Models/TestItem");
-
-app.get("/test-mongo", async (req, res) => {
-  try {
-    // Insert a new test item with a random name
-    const newItem = new TestItem({ name: `Item-${Date.now()}` });
-    await newItem.save();
-
-    // Fetch all test items
-    const allItems = await TestItem.find();
-
-    res.status(200).json({
-      message: "✅ MongoDB write and read successful",
-      inserted: newItem,
-      allItems,
-    });
-  } catch (err) {
-    console.error("❌ MongoDB test route error:", err);
-    res.status(500).json({ error: "MongoDB test failed", details: err.message });
-  }
-});
-// end of db connection test
-
 // ✅ Define SKU Schema
-const SKU = require('./Models/app');
+const SKU = require('./models/app');
 
 // ✅ Define Location Schema
 const LocationSchema = new mongoose.Schema({
