@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Define SKU Schema
-const SKU = require('./models/app');
+const SKU = require('./Models/app');
 
 // ✅ Define Location Schema
 const LocationSchema = new mongoose.Schema({
