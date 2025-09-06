@@ -45,7 +45,7 @@ mongoose.connect(dbURI, {
     console.log('✅ Connected to MongoDB');
     console.log(`🔗 Active Database: ${dbURI.split('/').pop()}`); // ✅ Log the database name dynamically
  // Load test routes
-const testRoutes = require('./routes/TestItem');
+const testRoutes = require('./routes/test');
 app.use('/api/test', testRoutes);
 
 // ✅ Test Route - Confirms API is Running
