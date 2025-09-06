@@ -33,6 +33,20 @@ app.use(cors({
 app.use(express.json()); // ✅ Parses JSON requests
 app.use(express.urlencoded({ extended: true })); // ✅ Parses URL-encoded data
 
+// ✅ ROOT ROUTE - Keep only one (REMOVE DUPLICATE on line 35)
+app.get('/', (req, res) => {
+    res.status(200).json({ message: "✅ API is running successfully!" });
+});
+
+// Load test routes
+const testRoutes = require('./routes/test');
+app.use('/api/test', testRoutes);
+
+// ✅ Health Check Route
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: "ok", message: "Backend is running" });
+});
+
 // ✅ Dynamically set the MongoDB URI based on environment variables
 const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/sku_database';
 
@@ -44,21 +58,6 @@ mongoose.connect(dbURI, {
 .then(() => {
     console.log('✅ Connected to MongoDB');
     console.log(`🔗 Active Database: ${dbURI.split('/').pop()}`); // ✅ Log the database name dynamically
-// test internally
-app.get('/', (req, res) => {
-  res.send('🚂 Backend is alive');
-});
-
- // Load test routes
-const testRoutes = require('./routes/test');
-app.use('/api/test', testRoutes);
-
-// ✅ Test Route - Confirms API is Running
-app.get("/", (req, res) => {
-    res.status(200).json({ message: "✅ API is running successfully!" });
-});   
-    const PORT = 4000;
-    app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
 })
 .catch((error) => {
     console.error('❌ MongoDB connection failed:', error);
@@ -320,6 +319,10 @@ app.put('/api/updateSKU/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+// ✅ START SERVER (MOVED OUTSIDE MongoDB connection)
+const PORT = process.env.PORT || 4000;  // ✅ FIX: Use Railway's dynamic port
+app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
 
 // Catch-All Route for 404 Errors
 app.use((req, res) => {
