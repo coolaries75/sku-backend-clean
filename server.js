@@ -20,6 +20,13 @@ app.get('/ping', (req, res) => {
 console.log('Railway PORT env variable:', process.env.PORT);
 console.log('All environment variables:', Object.keys(process.env));
 
+app.get('/version', (_req, res) => {
+  res.json({
+    commit: (process.env.RAILWAY_GIT_COMMIT_SHA || '').slice(0, 7),
+    ts: new Date().toISOString()
+  });
+});
+
 // ✅ Apply CORS **before defining routes**
 const allowedOrigins = [
   "http://localhost:3001",
