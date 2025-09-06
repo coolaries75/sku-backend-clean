@@ -3,10 +3,6 @@ const express = require('express');
 const router = express.Router();
 const TestItem = require('../Models/TestItem');
 
-router.get('/', (req, res) => {
-  res.json({ message: '✅ Test API endpoint working!', timestamp: new Date() });
-});
-
 router.get('/test-mongo', async (req, res) => {
   try {
     const testData = new TestItem({ name: 'Sample Item', quantity: 5 });
