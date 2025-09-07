@@ -67,9 +67,6 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: "✅ API is running successfully!" });
 });
 
-// Load test routes
-const testRoutes = require('./routes/test');
-app.use('/api/test', testRoutes);
 
 // ✅ Health Check Route
 app.get('/health', (req, res) => {
