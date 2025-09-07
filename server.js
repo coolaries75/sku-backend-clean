@@ -28,25 +28,35 @@ app.get('/version', (_req, res) => {
 });
 
 // ✅ Apply CORS **before defining routes**
+// ✅ CORS — allow local dev, LAN, and Vercel previews
 const allowedOrigins = [
   "http://localhost:3001",
   "http://192.168.0.174:3001",
-  "http://localhost:3000",  // ✅ Webpack Dev Server
-  "http://192.168.0.174:3000"
+  "http://localhost:3000",
+  "http://192.168.0.174:3000",
 ];
 
-// ✅ Allow requests from any device in the local network dynamically
+// Optional: fixed production frontend (e.g. https://app.example.com)
+if (process.env.FRONTEND_ORIGIN) {
+  allowedOrigins.push(process.env.FRONTEND_ORIGIN);
+}
+
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin) || /^http:\/\/192\.168\.\d+\.\d+:\d+$/.test(origin)) {
+    const o = origin || "";
+    const isLAN = /^http:\/\/192\.168\.\d+\.\d+:\d+$/.test(o);
+    const isVercel = /^https:\/\/.*\.vercel\.app$/.test(o);
+
+    if (!origin || allowedOrigins.includes(o) || isLAN || isVercel) {
       return callback(null, true);
     }
     console.warn("⛔ Blocked CORS Origin:", origin);
     return callback(new Error("CORS not allowed for this origin"));
   },
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  credentials: true,
 }));
+
 
 // ✅ Middleware - Ensure proper data handling
 app.use(express.json());
